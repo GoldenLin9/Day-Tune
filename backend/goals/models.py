@@ -33,9 +33,10 @@ class Log(models.Model):
 
 class Message(models.Model):
     log = models.ForeignKey(Log, on_delete=models.CASCADE)
-    content = models.TextField()
+    text = models.TextField()
+    voice_recording = models.FileField(upload_to='voice_recordings/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     ai = models.BooleanField()
 
     def __str__(self):
-        return f"{self.log.date} - {self.log.goal.title} - {self.content[:50]}"
+        return f"{self.log.date} - {self.log.goal.title} - {self.text[:50]}"
