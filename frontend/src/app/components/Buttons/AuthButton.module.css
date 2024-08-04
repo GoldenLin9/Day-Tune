@@ -1,0 +1,22 @@
+
+.authButton {
+    background-color: var(--primary);
+    border-radius: 1.25rem;
+    padding: 0.5rem 1rem;
+
+    border: none;
+
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.authButton:hover {
+    background-color: var(--primary-variant);
+}
+
+.authButtonLink {
+    color: var(--primary-background);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+}

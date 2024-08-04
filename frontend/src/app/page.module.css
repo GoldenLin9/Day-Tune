@@ -1,0 +1,79 @@
+#header {
+    background-color: var(--primary-background);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+}
+
+#nav {
+    display: flex;
+    align-items: center;
+}
+
+#nav ul{
+    display: flex;
+    gap: 1rem;
+    padding: 0;
+    align-items: center;
+}
+
+#nav ul li {
+    list-style: none;
+    color: white;
+}
+
+.headerLink {
+    color: white;
+    text-decoration: none;
+}
+
+#divider {
+    color: var(--accent-text);
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+
+#main {
+    background-color: var(--primary-background);
+    color: white;
+    padding: 1rem;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+#hero {
+    text-align: center;
+}
+
+#hero blockquote p {
+    line-height: 0.5;
+    font-weight: bold;
+    font-size: 1.75rem;
+}
+
+#heroText {
+    color: var(--accent-text);
+}
+
+.features, .testimonials, .footer {
+    padding: 50px 20px;
+}
+
+.features .featureItem, .testimonials .testimonialItem {
+    display: inline-block;
+    width: 30%;
+    margin: 10px;
+    background-color: #1f4068;
+    padding: 20px;
+    border-radius: 5px;
+}
