@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { Suspense } from 'react'
 import Clock from '@/components/clock'
 import { Schedule } from '@/types'
-import { getSchedule } from '@/utils/schedule'
+import { getSchedule } from '@/app/actions/schedule'
 
 // Static metadata
 export const metadata: Metadata = {
@@ -14,9 +14,24 @@ export default async function SchedulePage() {
         time_blocks: [
             {
                 id: 0,
-                start_time: '12:00',
-                end_time: '14:00',
-                category: 'Work'
+                start_time: 11,
+                end_time: 1,
+                category: 'Work',
+                color: 'yellow'
+            },
+            {
+                id: 0,
+                start_time: 3,
+                end_time: 5,
+                category: 'Work',
+                color: 'yellow'
+            },
+            {
+                id: 0,
+                start_time: 7,
+                end_time: 9,
+                category: 'Work',
+                color: 'yellow'
             }
         ],
         id: 0,

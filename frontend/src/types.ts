@@ -7,9 +7,10 @@ type User = {
 
 type TimeBlock = {
     id: number;
-    start_time: string;
-    end_time: string;
+    start_time: number;
+    end_time: number;
     category: string;
+    color: string;
     // user: User;
 }
 
