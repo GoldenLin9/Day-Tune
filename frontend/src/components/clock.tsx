@@ -7,8 +7,6 @@ import { useFormStatus } from "react-dom";
 import { createTimeBlock, deleteTimeBlock, updateTimeBlock } from '@/app/actions/time-block';
 import { start } from 'repl';
 
-import './clock.module.css';
-
 interface ClockProps {
     schedule: Schedule;
 }
@@ -42,6 +40,8 @@ const Clock: React.FC<ClockProps> = (props: ClockProps) => {
     const [selectedTimeBlock, setSelectedTimeBlock] = React.useState<TimeBlock | null>(null);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const addButtonRef = useRef<HTMLButtonElement>(null);
+    const stopButtonRef = useRef<HTMLButtonElement>(null);
 
     // Enable mouse down / mouse move events in edit mode
     const [editMode, setEditMode] = React.useState<boolean>(false);
@@ -90,9 +90,10 @@ const Clock: React.FC<ClockProps> = (props: ClockProps) => {
 
     /**
      * @param mousePos The (x,y) coordinates of the mouse
+     * @param radius The radius of the circle
      * @returns {Point} The (x,y) coordinates of the intersection point on the circle
      */
-    const getPointOnCircle = (mousePos: Point) : Point => {
+    const getPointOnCircle = (mousePos: Point, radius: number) : Point => {
         if (canvasRef.current == null) return {x: 0, y: 0};
 
         const vectorToMouse = {
@@ -111,7 +112,6 @@ const Clock: React.FC<ClockProps> = (props: ClockProps) => {
         const pointOnCircle = {
             x: center.x + unitVector.x * radius,
             y: center.y + unitVector.y * radius
-
         }
 
         return pointOnCircle;
@@ -181,35 +181,12 @@ const Clock: React.FC<ClockProps> = (props: ClockProps) => {
 
     /**
      * Handles the creation of a new time block
-     * @TODO Check if mouse click is within the clock
-     * @TODO Open modal to enter time block details on completion
-     * @TODO Optimistically update the UI on creation
      */
     const handleMouseDown = (e: MouseEvent) => {
         if (!editModeRef.current) {
-            // Start a new time block
-            let startPoint = getPointOnCircle({x: e.clientX, y: e.clientY});
-
-            setStartPoint(startPoint);
-
-            setEditMode(true);
+            // enterEditMode(e);
         } else {
-            // Finish the new time block
-            let endPoint = getPointOnCircle({x: e.clientX, y: e.clientY});
-
-            let wedge = getWedgeFromPoints(startPointRef.current, endPoint);
-
-            let start_time = map(0, Math.PI * 2, 0, 24, wedge.start_angle);
-            let end_time = map(0, Math.PI * 2.0, 0, 24, wedge.end_angle);
-
-            createTimeBlock(start_time, end_time, "Default")
-                .then(() => {})
-                .catch(err => {
-                    console.log(err)
-                })
-
-            setEditMode(false);
-
+            exitEditMode(e);
         }
     };
 
@@ -218,28 +195,52 @@ const Clock: React.FC<ClockProps> = (props: ClockProps) => {
      * @TODO Show the start and end times at edge of wedge
      */
     const handleMouseMove = (e: MouseEvent) => {
-        if (!editModeRef.current) return;
-
-        const canvas = canvasRef.current;
-        if (canvas != null) {
-            const ctx = canvas.getContext("2d");
-
-            let pointOnCircle = getPointOnCircle({x: e.clientX, y: e.clientY});
-
-            let wedge = getWedgeFromPoints(startPointRef.current, pointOnCircle);
-
-            // draw wedge
-            if (ctx != null) {
-                ctx.reset();
-                drawLoop();
-                ctx.fillStyle = "#1095D9";
-                ctx.beginPath();
-                ctx.moveTo(center.x, center.y);
-                ctx.arc(center.x, center.y, radius, wedge.start_angle, wedge.end_angle, !wedge.clockwise);
-                ctx.closePath();
-                ctx.fill();
-            }
+        // Check if mouse is in canvas
+        if (e.target != canvasRef.current) {
+            return;
         }
+
+        if (editModeRef.current) {
+            const canvas = canvasRef.current;
+            if (canvas != null) {
+                const ctx = canvas.getContext("2d");
+
+                let pointOnCircle = getPointOnCircle({x: e.clientX, y: e.clientY}, radius);
+
+                let wedge = getWedgeFromPoints(startPointRef.current, pointOnCircle);
+
+                // draw wedge
+                if (ctx != null) {
+                    ctx.reset();
+                    drawLoop();
+                    ctx.fillStyle = "#1095D9";
+                    ctx.beginPath();
+                    ctx.moveTo(center.x, center.y);
+                    ctx.arc(center.x, center.y, radius, wedge.start_angle, wedge.end_angle, !wedge.clockwise);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                // move stop button
+                if (stopButtonRef.current) {
+                    stopButtonRef.current.style.display = "block";
+                    const pointOutsideClock = getPointOnCircle({x: e.clientX, y: e.clientY}, radius + 50);
+
+                    // adjust button position based on width / height of button
+                    stopButtonRef.current.style.left = `${pointOutsideClock.x + canvas.offsetLeft - 32}px`;
+                    stopButtonRef.current.style.top = `${pointOutsideClock.y + canvas.offsetTop - 32}px`;
+                }
+            }
+        } else if (addButtonRef.current && canvasRef.current) {
+            const pointOutsideClock = getPointOnCircle({x: e.clientX, y: e.clientY}, radius + 50);
+
+            // adjust button position based on width / height of button
+            addButtonRef.current.style.left = `${pointOutsideClock.x + canvasRef.current.offsetLeft - 32}px`;
+            addButtonRef.current.style.top = `${pointOutsideClock.y + canvasRef.current.offsetTop - 32}px`;
+
+            return;
+        }
+
     }
 
     /** Displays information about time block with button to edit/delete */
@@ -251,6 +252,36 @@ const Clock: React.FC<ClockProps> = (props: ClockProps) => {
         deleteTimeBlock(timeBlock.id).then((deleteTimeBlock) => {
             console.log(deleteTimeBlock);
         })
+    }
+
+    const enterEditMode = (e: any) => {
+        // Start a new time block
+        let startPoint = getPointOnCircle({x: e.clientX, y: e.clientY}, radius);
+
+        setStartPoint(startPoint);
+
+        setEditMode(true);
+    }
+
+
+    const exitEditMode = (e: any) => {
+        // Finish the new time block
+        let endPoint = getPointOnCircle({x: e.clientX, y: e.clientY}, radius);
+
+        let wedge = getWedgeFromPoints(startPointRef.current, endPoint);
+
+        let start_time = map(0, Math.PI * 2, 0, 24, wedge.start_angle);
+        let end_time = map(0, Math.PI * 2.0, 0, 24, wedge.end_angle);
+
+        createTimeBlock(start_time, end_time, "Default")
+            .then(() => {})
+            .catch(err => {
+                console.log(err)
+            })
+
+        setEditMode(false);
+
+        if (stopButtonRef.current) stopButtonRef.current.style.display = "none";
     }
 
     /**
@@ -306,6 +337,8 @@ const Clock: React.FC<ClockProps> = (props: ClockProps) => {
                     </div>
                 )}
             </section>
+            <button ref={addButtonRef} id="start-add-button" className="absolute bg-primary hover:bg-primary-button text-accent-text w-16 h-16 rounded-full" onClick={enterEditMode}>+</button>
+            <button ref={stopButtonRef} id="stop-add-button" className="absolute bg-primary hover:bg-primary-button text-accent-text w-16 h-16 rounded-full hidden" onClick={exitEditMode}>S</button>
             <canvas ref={canvasRef} id="canvas" width="1000" height="1000"></canvas>
         </section>
     )

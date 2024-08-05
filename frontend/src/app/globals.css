@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --primary: #1095D9;
@@ -5,7 +8,7 @@
   --primary-variant: #7C3AED;
 
   --accent-primary: #7C3AED;
-  
+
   --input-background: #111827;
 
   --accent-text: rgba(255, 255, 255, 0.74);
