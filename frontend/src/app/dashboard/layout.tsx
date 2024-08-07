@@ -1,4 +1,6 @@
-import Navbar from "@/components/navbar"
+import Navbar from "@/app/components/Navbar/navbar"
+
+import styles from './layout.module.css'
 
 export default function DashboardLayout({
     children, // will be a page or nested layout
@@ -6,7 +8,7 @@ export default function DashboardLayout({
     children: React.ReactNode
 }) {
     return (
-        <section>
+        <section className={styles.dashboard}>
             <Navbar />
 
             {children}

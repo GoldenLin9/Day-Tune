@@ -1,8 +1,10 @@
 import { Metadata } from 'next'
 import { Suspense } from 'react'
-import Clock from '@/components/clock'
+import Clock from '@/app/components/Clock/clock'
 import { Schedule } from '@/types'
 import { getSchedule } from '@/app/actions/schedule'
+
+import styles from './page.module.css'
 
 // Static metadata
 export const metadata: Metadata = {
@@ -14,22 +16,22 @@ export default async function SchedulePage() {
         time_blocks: [
             {
                 id: 0,
-                start_time: 11,
-                end_time: 1,
+                start_time: '11',
+                end_time: '13',
                 category: 'Work',
                 color: 'yellow'
             },
             {
-                id: 0,
-                start_time: 3,
-                end_time: 5,
+                id: 1,
+                start_time: '15',
+                end_time: '17',
                 category: 'Work',
                 color: 'yellow'
             },
             {
-                id: 0,
-                start_time: 7,
-                end_time: 9,
+                id: 2,
+                start_time: '7',
+                end_time: '9',
                 category: 'Work',
                 color: 'yellow'
             }
@@ -53,7 +55,7 @@ export default async function SchedulePage() {
     // })
 
     return (
-        <section>
+        <section className={styles.schedule}>
             <Suspense fallback={<p>Loading schedule...</p>}>
                 <Clock schedule={schedule}/>
             </Suspense>

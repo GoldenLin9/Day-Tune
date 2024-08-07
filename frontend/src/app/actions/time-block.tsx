@@ -2,26 +2,27 @@
 
 import { API_URL } from '@/constants'
 import { TimeBlock } from '@/types'
+import { revalidatePath } from 'next/cache'
 
-async function createTimeBlock(start_time: number, end_time: number, category: string): Promise<TimeBlock> {
-  const res = await fetch(`${API_URL}/schedule/block`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        start_time,
-        end_time,
-        category
-      }),
-  })
+async function createTimeBlock(timeBlock: TimeBlock): Promise<TimeBlock> {
+  // const res = await fetch(`${API_URL}/schedule/block`, {
+  //     method: 'POST',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(timeBlock),
+  // })
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to add time block')
-  }
+  // if (!res.ok) {
+  //   // This will activate the closest `error.js` Error Boundary
+  //   throw new Error('Failed to add time block')
+  // }
 
-  return res.json()
+  revalidatePath('/dashboard/schedule');
+
+  return timeBlock;
+
+  // return res.json()
 }
 
 async function getTimeBlock(blockId: number): Promise<TimeBlock> {
@@ -34,13 +35,13 @@ async function getTimeBlock(blockId: number): Promise<TimeBlock> {
     return res.json()
 }
 
-async function updateTimeBlock(blockId: number, formData: FormData): Promise<Object> {
-  const res = await fetch(`${API_URL}/schedule/block/${blockId}`, {
+async function updateTimeBlock(timeBlock: TimeBlock): Promise<Object> {
+  const res = await fetch(`${API_URL}/schedule/block/${timeBlock.id}`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
       },
-      body: formData
+      body: JSON.stringify(timeBlock)
   })
 
   if (!res.ok) {
@@ -69,9 +70,20 @@ async function deleteTimeBlock(blockId: number): Promise<boolean> {
     return true
 }
 
+async function getCategories(userId: number): Promise<string[]> {
+    const res = await fetch(`${API_URL}/${userId}/categories`);
+
+    if (!res.ok) {
+      throw new Error('Failed to get data')
+    }
+
+    return res.json()
+}
+
 export {
     createTimeBlock,
     getTimeBlock,
     updateTimeBlock,
     deleteTimeBlock,
+    getCategories
 }
