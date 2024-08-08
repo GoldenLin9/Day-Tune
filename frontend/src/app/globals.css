@@ -4,7 +4,9 @@
 
 :root {
   --primary: #1095D9;
+  --primary-100: #60aad0;
   --primary-background: #1F2937;
+  --primary-background-100: #2f3e54;
   --primary-variant: #7C3AED;
 
   --primary-text: #fff;

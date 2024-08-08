@@ -1,15 +1,16 @@
 import { TimeBlock } from "@/types";
-import TimeBlockPage from "@/app/dashboard/schedule/timeblock/[id]/page";
-import Modal from "@/app/components/Modals/modal";
+import Modal from "@/app/components/Modals/Modal";
+import TimeBlockLayout from "../../../timeblock/layout";
 
+/** Renders the TimeBlock view page in a modal overlay */
 function TimeBlockModalPage({
     params: { id }
 } : {
     params: { id: string }
 }) {
     return (
-        <Modal>
-            <TimeBlockPage params={{id}} />
+        <Modal showBackButton={false}>
+            <TimeBlockLayout params={{id}} />
         </Modal>
     )
 }

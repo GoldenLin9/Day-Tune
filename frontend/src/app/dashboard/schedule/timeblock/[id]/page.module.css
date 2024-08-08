@@ -1,14 +1,18 @@
-.form {
+.timeblock {
     margin: 0 auto;
     max-width: 400px;
     padding: 1rem;
     width: 100%;
+    position: relative;
+    margin-bottom: 1em;
 }
 
 .time_fields {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 1rem;
+    margin: 1em 0;
 }
 
 .time_field {
@@ -16,7 +20,7 @@
     flex-direction: column;
 }
 
-.time_field input, .text_field input {
+.time_field dd, .text_field dd {
     background: var(--input-background);
     padding: 0.5em;
     border-radius: 5px;
@@ -27,25 +31,20 @@
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    padding: 1em 0;
+    padding-bottom: 1em;
     align-items: center;
 }
 
-.color_field input {
+.color_field dd {
     border: none;
-}
-
-.submit_button {
-    background: var(--primary);
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 1em;
-    text-align: center;
-    width: 100%;
     border-radius: 5px;
 }
 
-.submit_button:hover {
-    background: var(--primary-variant);
+.color {
+    height: 24px;
+    width: 24px;
+}
+
+.category {
+    width: 100%;
 }
