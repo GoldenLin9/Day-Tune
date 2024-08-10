@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Activate your Better Self account{% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% blocktrans %}Hi {{ first_name }},{% endblocktrans %}
+
+{% trans "Please use the following code to activate your account:" %}
+{{ code }}
+
+{% trans "Thank you for joining us!" %}
+
+{% blocktrans %}Better Self Team{% endblocktrans %}
+{% endblock text_body %}

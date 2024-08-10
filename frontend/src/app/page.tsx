@@ -26,8 +26,8 @@ export default function Home() {
 
                     <ul>
                         {/* takes you to other pages */}
-                        <li><Link className = {styles.headerLink} href = "#">Login</Link></li>
-                        <li><Link className = {styles.headerLink} href = "#">Signup</Link></li>
+                        <li><Link className = {styles.headerLink} href = "/login">Login</Link></li>
+                        <li><Link className = {styles.headerLink} href = "/register">Register</Link></li>
                         <li><AuthButton text={"Get Started"} link={"/dashboard"} /></li>
                     </ul>
                 </nav>
