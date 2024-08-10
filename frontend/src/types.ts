@@ -6,11 +6,12 @@ type User = {
 }
 
 type TimeBlock = {
-    id: number;
+    id?: number;
     start_time: string;
     end_time: string;
     category: string;
-    // user: User;
+    color: string;
+    user?: User;
 }
 
 type Schedule = {

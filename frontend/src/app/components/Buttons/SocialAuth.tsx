@@ -21,7 +21,6 @@ export function SocialButton({ type, provider }: Props) {
             const response = await axiosInstance.get(url);
 
             if (response.status == 200) {
-                console.log("Response: ", response.data);
                 window.location.replace(response.data.authorization_url)
             } else {
                 toast.error("Failed to sign in with Google");

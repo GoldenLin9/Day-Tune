@@ -47,12 +47,11 @@ export function LoginForm() {
             }
         
         }).catch((error) => {
-            console.log("ERROR: ", error);
+            
         })
     }
 
     function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
-        console.log("Email: ", e.target.value);
         setEmail(e.target.value);
     }
 

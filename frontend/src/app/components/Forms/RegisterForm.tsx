@@ -48,7 +48,6 @@ export default function RegisterForm() {
             })
             .catch((error) => {
                 toast.error("Error creating account. Please try again");
-                console.log(error.response.data)
                 setErrors(error.response.data.password ? error.response.data.password : []);
             })
     }

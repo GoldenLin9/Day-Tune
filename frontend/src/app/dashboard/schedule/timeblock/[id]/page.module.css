@@ -1,0 +1,50 @@
+.timeblock {
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 1rem;
+    width: 100%;
+    position: relative;
+    margin-bottom: 1em;
+}
+
+.time_fields {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin: 1em 0;
+}
+
+.time_field {
+    display: flex;
+    flex-direction: column;
+}
+
+.time_field dd, .text_field dd {
+    background: var(--input-background);
+    padding: 0.5em;
+    border-radius: 5px;
+    border: none;
+}
+
+.text_field, .color_field {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding-bottom: 1em;
+    align-items: center;
+}
+
+.color_field dd {
+    border: none;
+    border-radius: 5px;
+}
+
+.color {
+    height: 24px;
+    width: 24px;
+}
+
+.category {
+    width: 100%;
+}

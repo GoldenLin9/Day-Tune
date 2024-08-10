@@ -21,13 +21,11 @@ export default function VerifyForm() {
     const router = useRouter();
 
     const axiosInstance = useAxios();
-    console.log("userId", userId);
 
     const goNextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target;
         const inputIndex = inputRefs.findIndex((inputRef) => inputRef.current === target);
         
-        console.log("JUST EDITED: ", target.value);
         let newCode = [...code];
         newCode[inputIndex] = target.value;
         setCode(newCode);
@@ -54,6 +52,7 @@ export default function VerifyForm() {
                 type="text"
                 maxLength={1}
                 size={1}
+                placeholder="-"
             />
         );
     });
@@ -65,10 +64,8 @@ export default function VerifyForm() {
             userId: userId,
             code: code.join("")
         }).then((res) => {
-            console.log(res.data);
             router.push("/login");
         }) .catch((error) => {
-            console.log(error.response.data.message);
             setError(error.response.data.message);
         });
 

@@ -1,4 +1,4 @@
-import Goal from '@/components/goal'
+import Goal from '@/app/components/Goal/Goal'
 
 export default function GoalPage() {
     return (

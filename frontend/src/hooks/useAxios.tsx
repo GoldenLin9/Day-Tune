@@ -22,24 +22,16 @@ const useAxios = () => {
     });
     
     
-    // Optional: Add interceptors if needed
+
     axiosInstance.interceptors.request.use(async req => {
 
-        console.log("ENTERED")
-
-        console.log("2MY REFRESH TOKEN: ", refreshToken);
-        console.log("222MY ACCESS TOKEN: ", accessToken);
-        console.log("222 MY USER: ", user);
-    
         // get new access token if expired
-        
         if (!refreshToken) {
             return req;
         }
     
         const isExpired = jwtDecode(refreshToken).exp < dayjs().unix();
 
-        console.log("IS MY TOKEN EXPIRED: ", isExpired);
     
         if (!isExpired) {
             return req;

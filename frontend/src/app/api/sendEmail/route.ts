@@ -9,8 +9,6 @@ export async function POST(request: Request) {
     const GMAIL_USER = process.env.GMAIL_USER as string;
     const GMAIL_PASS = process.env.GMAIL_PASSWORD as string;
 
-    console.log("GMAIL_USER: ", GMAIL_USER);
-    console.log("GMAIL_PASS: ", GMAIL_PASS);
 
     const {to, subject, text } = await request.json();
 

@@ -59,8 +59,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         const token = Cookies.get("refresh");
         return token !== undefined ? token : null;
     })
-    console.log("MY ACCESS", accessToken);
-    console.log("MY REFRESH", refreshToken);
 
     const [user, setUser] = useState<any>(null);
 
@@ -72,7 +70,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     
     useEffect(() => {
-        console.log("CALLING WITH: ", accessToken);
         axiosInstance.get("/api/users/me")
         .then((response) => {
             setUser(response.data);
