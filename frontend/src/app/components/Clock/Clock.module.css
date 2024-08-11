@@ -24,23 +24,38 @@
 }
 .clock {
     flex-grow: 1;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
     height: 100%;
 }
 
-/*
-.modal {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 400px;
-} */
 
 .modal {
-    position: absolute;
-    bottom: 30%;
-    right: 35%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 300px;
+    margin-right: 1em;
+    font-size: 0.75em;
+    height: 100%;
+}
+
+.selected_time_block {
+    align-self: first baseline;
+    width: 100%;
+}
+
+.selected_time_block .timeblock {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+
+.snapToInput {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: black;
 }

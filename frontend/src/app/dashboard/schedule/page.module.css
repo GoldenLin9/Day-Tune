@@ -1,3 +1,13 @@
 .schedule {
     background-color: var(--primary-background);
 }
+
+.toggle_button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+.toggle_button:hover {
+    cursor: pointer;
+}

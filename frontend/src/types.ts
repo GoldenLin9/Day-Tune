@@ -5,13 +5,15 @@ type User = {
     last_name: string;
 }
 
+// Defined like the backend models
 type TimeBlock = {
-    id?: number;
+    id: number;
     start_time: string;
     end_time: string;
     category: string;
     color: string;
     user?: User;
+    children: Array<TimeBlock>;
 }
 
 type Schedule = {

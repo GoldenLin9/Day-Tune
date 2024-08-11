@@ -1,62 +1,74 @@
+'use client';
+
 import { Metadata } from 'next'
-import { Suspense } from 'react'
+import { useState } from 'react'
 import Clock from '@/app/components/Clock/Clock'
 import { Schedule } from '@/types'
 import { getSchedule } from '@/app/actions/Schedule'
 
 import styles from './page.module.css'
+import Calendar from '@/app/components/Calendar/Calendar'
 
-// Static metadata
-export const metadata: Metadata = {
-  title: 'Schedule',
+
+enum ScheduleView {
+    CLOCK = 'clock',
+    CALENDAR = 'calendar'
 }
 
 /** @TODO Fetch schedule data from server */
-export default async function SchedulePage() {
-    const schedule: Schedule = {
+export default function SchedulePage() {
+    const schedule = {
         time_blocks: [
-            {
-                id: 0,
-                start_time: '11',
-                end_time: '13',
-                category: 'Work',
-                color: '#ffff00'
-            },
-            {
-                id: 1,
-                start_time: '15',
-                end_time: '17',
-                category: 'Work',
-                color: '#ffff00'
-            },
-            {
-                id: 2,
-                start_time: '7',
-                end_time: '9',
-                category: 'Work',
-                color: '#ffff00'
-            },
+            // {
+            //     id: 1,
+            //     start_time: '11:00',
+            //     end_time: '16:00',
+            //     category: 'Exercise',
+            //     color: '#ffdd00',
+            //     children: [
+            //         {
+            //             id: 2,
+            //             start_time: '11:30',
+            //             end_time: '14:30',
+            //             category: 'Walk Cat',
+            //             color: '#fab0ef',
+            //             children: [],
+            //         },
+            //     ],
+            // },
+            // {
+            //     id: 2,
+            //     start_time: '07:00',
+            //     end_time: '09:00',
+            //     category: 'High School Meet Up',
+            //     color: '#ff0000',
+            //     children: [],
+            // },
             {
                 id: 3,
-                start_time: '2',
-                end_time: '3',
-                category: 'Work',
-                color: '#ffff00'
+                start_time: '02:00',
+                end_time: '20:00',
+                category: 'Breakfast',
+                color: '#ffdd00',
+                children: [],
             },
-            {
-                id: 4,
-                start_time: '20',
-                end_time: '22',
-                category: 'Work',
-                color: '#ffff00'
-            },
-            {
-                id: 5,
-                start_time: '23',
-                end_time: '1',
-                category: 'Work',
-                color: '#ffff00'
-            }
+            // {
+            //     id: 4,
+            //     start_time: '20:00',
+            //     end_time: '22:00',
+            //     category: 'Work',
+            //     color: '#0000ff',
+            //     children: [],
+            // },
+            // {
+            //     id: 5,
+            //     start_time: '23:00',
+            //     end_time: '01:00',
+            //     category: 'Work',
+            //     color: '#fa8072',
+            //     children: []
+
+            // },
         ],
         id: 0,
         user: {
@@ -76,11 +88,17 @@ export default async function SchedulePage() {
     //     return schedule
     // })
 
+    const [view, setView] = useState(ScheduleView.CLOCK)
+
+    const toggleView = () => {
+        setView(view === ScheduleView.CLOCK ? ScheduleView.CALENDAR : ScheduleView.CLOCK)
+    }
+
     return (
         <section className={styles.schedule}>
-            <Suspense fallback={<p>Loading schedule...</p>}>
-                <Clock schedule={schedule}/>
-            </Suspense>
+            <button onClick={toggleView} className={styles.toggle_button}>Toggle View</button>
+            { view === ScheduleView.CALENDAR ? <Calendar schedule={schedule}/> : <Clock schedule={schedule}/> }
+
         </section>
     )
 }
