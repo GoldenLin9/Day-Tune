@@ -17,8 +17,8 @@ class TimeBlock(models.Model):
     end_time = models.TimeField()
     date = models.DateField()
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.id}: {self.start_time} - {self.end_time} - {self.category.name}"
+        return f"{self.id}: {self.start_time} - {self.end_time} - {self.category.name if self.category else 'No Category'}"

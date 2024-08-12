@@ -99,7 +99,12 @@ class TimeBlockView(APIView):
             else:
                 time_parent_index = index_mappings.get(parent_id.id)
 
-            time = Node(time_block.id, time_parent_index, time_block.start_time, time_block.end_time, category.id, category.color, category.description, category.name)
+            if category == None:
+                time = Node(time_block.id, time_parent_index, time_block.start_time, time_block.end_time, None, None, None, None)
+
+            else:
+                time = Node(time_block.id, time_parent_index, time_block.start_time, time_block.end_time, category.id, category.color, category.description, category.name)
+
             time.index = index
             times.append(time)
         
@@ -116,7 +121,11 @@ class TimeBlockView(APIView):
     
 
     def post(self, request):
-        category = get_object_or_404(Category, pk = request.data['category_id'], user = request.user)
+
+        if request.data['category_id'] == None:
+            category = None
+        else:
+            category = get_object_or_404(Category, pk = request.data['category_id'], user = request.user)
 
         if request.data['parent_id'] == None:
             parent = None
