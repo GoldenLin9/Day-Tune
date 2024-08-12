@@ -63,6 +63,7 @@ def convertToJSON(node):
         "color": node.color,
         "description": node.description,
         "name": node.name,
+        "children_count": len(children),
         "children": children
     }
 
