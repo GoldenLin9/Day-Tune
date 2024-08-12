@@ -4,7 +4,6 @@ from django.conf import settings
 class CustomJWTAuthentication(JWTAuthentication):
 
     def authenticate(self, request):
-        print("TRY*IHNG TO AUTHENTICATE")
         try:
             header = self.get_header(request)
             if header is None:

@@ -7,15 +7,18 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     color = models.CharField(max_length=7)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return f"{self.id}: {self.name} - {self.color}"
 
 class TimeBlock(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
+    date = models.DateField()
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.start_time} - {self.end_time} - {self.category.name}"
+        return f"{self.id}: {self.start_time} - {self.end_time} - {self.category.name}"
