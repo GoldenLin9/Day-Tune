@@ -8,10 +8,11 @@
     overflow: hidden;
 }
 
-.modal form {
+.modal form, .modal .timeblock  {
     background: transparent;
     border: none;
     box-shadow: none;
+    margin-bottom: 1em;
 }
 
 .fakeModal {

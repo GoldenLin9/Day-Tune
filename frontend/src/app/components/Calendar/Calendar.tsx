@@ -1,6 +1,12 @@
 'use client';
 
-export default function Calendar() {
+import { Schedule } from "@/types";
+
+interface CalendarProps {
+    schedule: Schedule;
+}
+
+export default function Calendar(props: CalendarProps) {
     return (
         <section>
             <h1>Calendar</h1>

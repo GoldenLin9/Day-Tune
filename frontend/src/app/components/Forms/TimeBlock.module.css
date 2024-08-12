@@ -9,6 +9,7 @@
     background-color: var(--primary-background);
     border: 2px solid var(--primary-background-100);
     box-shadow: 0px 0px 10px 0px var(--primary-background-100);
+    box-sizing: border-box;
 }
 
 .time_fields {
@@ -22,7 +23,9 @@
 
 .time_field {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
 }
 
 .time_field input, .text_field input {
@@ -33,6 +36,14 @@
     flex-grow: 1;
     max-width: 100%;
 }
+
+.time_field dd, .text_field dd {
+    background: var(--input-background);
+    padding: 0.5em;
+    border-radius: 5px;
+    border: none;
+}
+
 
 .text_field, .color_field {
     display: flex;
@@ -45,6 +56,10 @@
 
 .color_field input {
     border: none;
+}
+
+.color_field input:hover {
+    cursor: pointer;
 }
 
 .submit_button {
