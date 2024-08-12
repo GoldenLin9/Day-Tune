@@ -27,28 +27,12 @@ class Node:
         self.name = name
 
         self.children = []
-        self.index = None
+
 
     def __str__(self):
         return f"{self.start_time} - {self.end_time} - {self.name}: {self.id}"
 
 
-# update children's array for an undiscovered branch
-def updateChildrens(node, nodes, visited):
-    # no parent for the root node
-    if node.parent_index == None:
-        return
-
-    
-    parent = nodes[node.parent_index]
-    parent.children.append(node)
-
-    # keep going up the tree if the parent is not the root or a discovered branch
-    if not visited[parent.index]:
-        updateChildrens(parent, nodes, visited)
-
-    visited[node.index] = True
-    
 def convertToJSON(node):
 
     children = []
@@ -71,33 +55,23 @@ def convertToJSON(node):
 class TimeBlockView(APIView):
 
     def get(self, request, date_str):
-        # sort time blocks to make sure childrens get added from earliest to latest
         try:
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
         except ValueError:
             return Response({"error": "Invalid date format"}, status=400)
         
-        time_blocks = TimeBlock.objects.filter(user = request.user, date = date)
-        times_blocks = sorted(time_blocks, key = lambda time_block: time_block.end_time)
+        # sort time blocks to make sure childrens get added from earliest to latest
+        time_blocks = sorted(TimeBlock.objects.filter(user = request.user, date = date), key = lambda time_block: time_block.end_time)
 
-        time_blocks_size = len(times_blocks)
-        visited = [False] * (time_blocks_size + 1)
 
-        index_mappings = { time_block.id: index for (index, time_block) in enumerate(times_blocks) }
-        index_mappings[-1] = time_blocks_size
-
+        index_mappings = { time_block.id: index for (index, time_block) in enumerate(time_blocks) }
         root_time = Node(None, None, None, None, None, None, None, None)
-        root_time.index = time_blocks_size
+
         times = []
-        for (index, time_block) in enumerate(times_blocks):
+        for time_block in time_blocks:
 
             category = time_block.category
-
-            parent_id = time_block.parent
-            if parent_id == None:
-                time_parent_index = time_blocks_size
-            else:
-                time_parent_index = index_mappings.get(parent_id.id)
+            time_parent_index = index_mappings.get(time_block.parent_id, None)
 
             if category == None:
                 time = Node(time_block.id, time_parent_index, time_block.start_time, time_block.end_time, None, None, None, None)
@@ -105,18 +79,17 @@ class TimeBlockView(APIView):
             else:
                 time = Node(time_block.id, time_parent_index, time_block.start_time, time_block.end_time, category.id, category.color, category.description, category.name)
 
-            time.index = index
             times.append(time)
         
-        times.append(root_time)
         
-
         for time in times:
-            if not visited[time.index]:
-                updateChildrens(time, times, visited)
+            if time.parent_index == None:
+                root_time.children.append(time)
+            else:
+                times[time.parent_index].children.append(time)
+
 
         data = convertToJSON(root_time)
-
         return Response(data, status.HTTP_200_OK)
     
 
