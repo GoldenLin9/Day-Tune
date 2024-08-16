@@ -25,26 +25,27 @@ const useAxios = () => {
 
     axiosInstance.interceptors.request.use(async req => {
 
-        // get new access token if expired
-        if (!refreshToken) {
+        
+        if (!accessToken) {
+            console.log("No access token")
             return req;
         }
-    
-        const isExpired = jwtDecode(refreshToken).exp < dayjs().unix();
 
+        const tokenExpiration = jwtDecode(accessToken).exp as number;
+        const isExpired = dayjs().isAfter(dayjs.unix(tokenExpiration));
+    
     
         if (!isExpired) {
             return req;
         }
     
         try {
-            const response = await axiosInstance.post("api/jwt/refresh/");
+            const response = await axios.post(`${baseURL}/api/jwt/refresh/`, { refresh: refreshToken });
     
             if (response.status === 200) {
                 const { access } = response.data;
                 setAccessToken(access);
                 Cookies.set("access", access);
-                
             }
     
         } catch (error) {

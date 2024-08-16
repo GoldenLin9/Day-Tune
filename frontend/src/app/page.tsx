@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import logo from './logo.svg'
+
 import Link from 'next/link'
 import styles from './page.module.css'
 
@@ -10,7 +10,7 @@ export default function Home() {
         <>
             <header id = {styles.header}>
                 <div id = {styles.logo}>
-                    <Image src = {logo} alt = "logo" width = {50} height = {50}/>
+                    <Image src = {"/logo.svg"} alt = "logo" width = {50} height = {50}/>
                     <h1>Better Self</h1>
                 </div>
             

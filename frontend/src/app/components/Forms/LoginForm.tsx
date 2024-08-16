@@ -4,16 +4,15 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { jwtDecode } from "jwt-decode";
-// import cookie from 'cookie';
-import Cookie from 'js-cookie';
 import useAxios from "@/hooks/useAxios";
 
+type Error = string;
 
 export function LoginForm() {
 
     const router = useRouter();
-    const { setAccessToken, setRefreshToken, setUser } = useAuth();
+    const { user, userId, loading, login } = useAuth();
+
     const [error, setError] = useState<string | null>(null);
     
     const [email, setEmail] = useState<string>("");
@@ -24,31 +23,15 @@ export function LoginForm() {
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        axiosInstance.post("api/jwt/create/", {
-            email: email,
-            password: password
-        }).then(async (response) => {
-
-            if (response.status === 200) {
-                setAccessToken(response.data.access);
-                setRefreshToken(response.data.refresh);
-                Cookie.set("access", response.data.access);
-                Cookie.set("refresh", response.data.refresh);
-
-                await axiosInstance.get("/api/users/me")
-                .then((response) => {
-                    setUser(response.data);
-                }).catch((error) => {
-                    console.error(error);
-                })
+        const error = await login(email, password);
 
 
-                router.push("/dashboard");
-            }
+        if (error != null) {
+            setError(error);
+            return;
+        }
         
-        }).catch((error) => {
-            
-        })
+        router.push("/dashboard");
     }
 
     function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {

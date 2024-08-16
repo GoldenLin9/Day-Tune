@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export default function VerifyForm() {
     const [error, setError] = useState("");
     const [code, setCode] = useState(Array(6).fill(""));
-    const { userId } = useContext(AuthContext);
+    const { verifyEmail } = useContext(AuthContext);
     const [inputRefs, setInputRefs] = useState([
         useRef<HTMLInputElement>(null),
         useRef<HTMLInputElement>(null),
@@ -57,17 +57,16 @@ export default function VerifyForm() {
         );
     });
 
-    function handleSubmit() {
+    async function handleSubmit() {
 
-        
-        axiosInstance.post("/api/verify-email/", { 
-            userId: userId,
-            code: code.join("")
-        }).then((res) => {
-            router.push("/login");
-        }) .catch((error) => {
-            setError(error.response.data.message);
-        });
+        const error = await verifyEmail(code.join(""));
+
+        if (error != null) {
+            setError(error);
+            return;
+        }
+
+        router.push("/login");
 
     }
 

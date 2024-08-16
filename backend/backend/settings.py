@@ -163,8 +163,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+STATIC_URL = '/static/'
 
-STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -206,12 +210,20 @@ DJOSER = {
 
     "EMAIL": {
         "activation": "users.email.ActivationEmail",
+
+        "password_reset": "users.email.PasswordResetEmail",
+
+        "confirmation": "users.email.ConfirmationEmail",
+        "password_changed_confirmation": "djoser.email.PasswordChangedConfirmationEmail",
+
+        "username_changed_confirmation": "djoser.email.UsernameChangedConfirmationEmail",
+        "username_reset": "djoser.email.UsernameResetEmail",
     }
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
@@ -250,13 +262,17 @@ SIMPLE_JWT = {
 }
 
 AUTH_COOKIE = 'access'
-AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 60 * 24 * 30 # 30 days
-AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24 * 60 # 60 days
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 1 # 1 minute
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24 * 30 # 30 days
 AUTH_COOKIE_SECURE = env('AUTH_COOKIE_SECURE', default=False) == 'True'
 AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = '/'
 AUTH_COOKIE_SAMESITE = 'None'
 
+
+EMAIL_FRONTEND_PROTOCOL = env('PROTOCOL')
+EMAIL_FRONTEND_DOMAIN = env('DOMAIN')
+EMAIL_FRONTEND_SITE_NAME = env('SITE_NAME')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

@@ -7,6 +7,13 @@ import { AuthContext } from '@/context/AuthContext';
 import { toast } from "react-toastify";
 
 
+type ErrorDetail = {
+    field: string;
+    messages: Array<string>;
+};
+
+type Errors = ErrorDetail[];
+
 interface FormInfo {
     firstName: string;
     lastName: string;
@@ -16,9 +23,9 @@ interface FormInfo {
 }
 
 export default function RegisterForm() {
-    const { setUserId } = useContext(AuthContext);
+    const { register } = useContext(AuthContext);
     const router = useRouter();
-    const [errors, setErrors] = useState<string[]>([]);
+    const [errors, setErrors] = useState<Errors | []>([]);
     const [formInfo, setFormInfo] = useState<FormInfo>({
         firstName: "",
         lastName: "",
@@ -29,27 +36,27 @@ export default function RegisterForm() {
 
     const axiosInstance = useAxios();
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        let data = {
-            first_name: formInfo.firstName,
-            last_name: formInfo.lastName,
-            email: formInfo.email,
-            password: formInfo.password,
-            re_password: formInfo.passwordConfirmation
+
+
+        const registerErrors: Errors = await register(formInfo.firstName, formInfo.lastName, formInfo.email, formInfo.password, formInfo.passwordConfirmation);
+
+        if (registerErrors.length !== 0) {
+
+            registerErrors.forEach(({field, messages}) => {
+                setErrors(errors => [...errors, {field, messages}]);
+            });
+
+            toast.error("Error creating account. Please try again");
+            return;
         }
 
-        axiosInstance.post("/api/users/", data)
-            .then((response) => {
-                toast.success("Account created successfully. Please check your email to continue");
-                setUserId(response.data.id);
-                router.push("/verify-email");
-            })
-            .catch((error) => {
-                toast.error("Error creating account. Please try again");
-                setErrors(error.response.data.password ? error.response.data.password : []);
-            })
+        toast.success("Account created successfully. Please check your email to continue");
+        router.push("/verify-email");
+        
+
     }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -67,7 +74,20 @@ export default function RegisterForm() {
             <input type="password" name="password" placeholder="Password" onChange={handleChange} />
             <input type="password" name="passwordConfirmation" placeholder="Confirm Password" onChange={handleChange} />
             <button type="submit">Register</button>
-            {errors.map((error, index) => <p key={index}>{error}</p>)}
+
+            {errors.map(({field, messages}) => {
+                return (
+                    <div key={field}>
+                        <p>{field}</p>
+                        <ul>
+                            {messages.map((message, index) => {
+                                return <li key={index}>{message}</li>
+                            })}
+                        </ul>
+                    </div>
+                )
+            })}
         </form>
+
     )
 }

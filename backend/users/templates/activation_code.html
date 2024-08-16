@@ -1,16 +1,21 @@
 {% load i18n %}
 
 {% block subject %}
-{% blocktrans %}Activate your Better Self account{% endblocktrans %}
+{% blocktrans %}Password reset request for Better Self{% endblocktrans %}
 {% endblock subject %}
 
 {% block text_body %}
 {% blocktrans %}Hi {{ first_name }},{% endblocktrans %}
 
-{% trans "Please use the following code to activate your account:" %}
-{{ code }}
+{% trans "You have requested a password reset for your Better Self account. Please go to the following page and choose a new password:" %}
+{% block url %}
+{{ protocol }}://{{ domain }}/{{ url|safe }}
+{% endblock url %}
 
-{% trans "Thank you for joining us!" %}
+{% trans "If you did not request this change, please ignore this email." %}
 
-{% blocktrans %}Better Self Team{% endblocktrans %}
+{% blocktrans %}Thank you for being a part of Better Self!{% endblocktrans %}
+
+{% blocktrans %}Best regards,{% endblocktrans %}
+{% blocktrans %}The Better Self Team{% endblocktrans %}
 {% endblock text_body %}
