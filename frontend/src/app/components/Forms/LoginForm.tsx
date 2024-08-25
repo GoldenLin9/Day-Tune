@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import useAxios from "@/hooks/useAxios";
+import AuthInput from "./AuthInput";
+import AuthButton from "../Buttons/AuthButton";
+import Link from "next/link";
+import styles from './LoginForm.module.css';
 
 type Error = string;
 
@@ -41,15 +45,12 @@ export function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>
-                Email
-                <input name="email" type="email" onChange = {handleEmailChange} />
-            </label>
-            <label>
-                Password
-                <input name="password" type="password" onChange = { (e) => setPassword(e.target.value)} />
-            </label>
-            <button>Sign In</button>
+
+            <AuthInput imageType="email" type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <AuthInput imageType="password" type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Link className={styles.forgotPasswordLink} href="/forgot-password">Forgot password?</Link>
+            <AuthButton text="Login" link="#" />
+
             {error && <p>{error}</p>}
         </form>
     )

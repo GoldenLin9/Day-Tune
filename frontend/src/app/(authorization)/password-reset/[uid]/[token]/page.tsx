@@ -1,61 +1,21 @@
-"use client"
-
-
-import { useParams } from "next/navigation";
-import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import PasswordResetForm from '@/app/components/Forms/PasswordResetForm';
+import styles from '@/app/(authorization)/authForms.module.css';
+import Link from 'next/link';
 
 
 const PasswordResetPage = () => {
 
-    const { uid, token } = useParams<{ uid: string, token: string }>();
-    const [newPassword, setNewPassword] = useState("");
-    const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
-    const [errorArray, setErrorArray] = useState<JSX.Element[]>([]);
-
-    const { resetPassword } = useAuth();
-    const router = useRouter();
-
-
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        setErrorArray([]);
-        e.preventDefault();
-
-        const error = await resetPassword(uid, token, newPassword, newPasswordConfirmation);
-
-        if (error != null) {
-
-            Object.entries(error).map(([errorType, errors], index) => {
-                setErrorArray(errorArray => [...errorArray, <p key={index}>{errorType}: {errors.join(", ")}</p>]);
-            });
-
-            return;
-        }
-
-
-        toast.success("Password reset successfully");
-        router.push("/login");
-        
-    }
-
     return (
-        <div>
-            <h1>Enter a new password</h1>
+        <>
+            <h1 className={styles.authTypeHeader}>Reset Password</h1>
 
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="password">Password</label>
-                <input type="password" name="password" id="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+            <p className={styles.authHelpText}>Enter your new password</p>
 
-                <label htmlFor="passwordConfirmation">Confirm Password</label>
-                <input type="password" name="passwordConfirmation" id="passwordConfirmation" value={newPasswordConfirmation} onChange={e => setNewPasswordConfirmation(e.target.value)} />
+            <PasswordResetForm />
 
-                <button type="submit">Submit</button>
+            <p className={styles.authAltText}>Remember your password? Go to the <Link className={styles.authAltLink} href="/login">Login page</Link></p>
 
-                {errorArray}
-            </form>
-        </div>
+        </>
     );
 }
 export default PasswordResetPage;

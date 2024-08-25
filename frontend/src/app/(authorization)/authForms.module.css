@@ -1,0 +1,52 @@
+.authTypeHeader {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.authHelpText {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--accent-text);
+    margin-bottom: 1rem;
+}
+
+.authAltText {
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.authAltText a {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.authAltText a:hover {
+    text-decoration: underline;
+    
+}
+
+.borderLine {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--accent-text);
+    padding-bottom: 0.5rem;
+    width: 100%;
+    justify-content: center;
+    
+}
+
+.highlightText {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.highlightText:hover {
+    cursor: pointer;
+}

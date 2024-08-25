@@ -1,0 +1,31 @@
+
+
+.authInput {
+    background-repeat: no-repeat;
+    background-size: 1.5em;
+    background-position: 0.5em;
+    padding-left: 2.5em;
+
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+    width: 100%;
+    margin-bottom: 1em;
+    border-radius: 1em;
+    font-size: 1rem;
+    outline: none;
+    background-color: var(--input-background);
+    caret-color: var(--accent-primary);
+    color: var(--accent-text);
+}
+
+.userImage {
+    background-image: url(/user.svg);
+}
+
+.emailImage {
+    background-image: url(/email.svg);
+}
+
+.passwordImage {
+    background-image: url(/password.svg);
+}

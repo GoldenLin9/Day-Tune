@@ -2,6 +2,8 @@
 
 import { toast } from 'react-toastify';
 import useAxios from '@/hooks/useAxios';
+import styles from './SocialAuth.module.css';
+import Image from 'next/image';
 
 interface Props {
     type: "Google";
@@ -33,8 +35,14 @@ export function SocialButton({ type, provider }: Props) {
     }
 
     return (
-        <button onClick = {continueWithSocial}>
-            Sign in with {type}
+        <button className={styles.gsiMaterialButton} onClick={continueWithSocial}>
+            <div className={styles.gsiMaterialButtonState}></div>
+            <div className={styles.gsiMaterialButtonContentWrapper}>
+                <div className={styles.gsiMaterialButtonIcon}>
+                    <Image src="/google-icon.svg" alt="Google Icon" width={24} height={24} />
+                </div>
+                <span className={styles.gsiMaterialButtonContents}>Sign in with Google</span>
+            </div>
         </button>
     )
 }

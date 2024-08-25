@@ -4,58 +4,56 @@ import { useState, useRef, useContext } from "react";
 import { AuthContext } from '@/context/AuthContext';
 import useAxios from "@/hooks/useAxios";
 import { useRouter } from "next/navigation";
+import styles from './VerifyForm.module.css';
+import AuthButton from "../Buttons/AuthButton";
 
 export default function VerifyForm() {
     const [error, setError] = useState("");
-    const [code, setCode] = useState(Array(6).fill(""));
+    const [code, setCode] = useState<string []>(Array(6).fill(""));
     const { verifyEmail } = useContext(AuthContext);
-    const [inputRefs, setInputRefs] = useState([
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-    ]);
+    const inputRefs = Array(6).fill(null).map(() => useRef<HTMLInputElement>(null));
     
     const router = useRouter();
 
-    const axiosInstance = useAxios();
-
-    const goNextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const target = e.target;
-        const inputIndex = inputRefs.findIndex((inputRef) => inputRef.current === target);
-        
-        let newCode = [...code];
-        newCode[inputIndex] = target.value;
-        setCode(newCode);
 
 
+    const goBackInput = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
 
-        if (inputIndex === inputRefs.length - 1) {
-            return;
+        if (e.key === "Backspace") {
+            let lengthBefore = code[index].length;
+
+            // delete the input value
+            let newCode = [...code];
+            newCode[index] = "";
+            setCode(newCode);
+
+            // if on the first input, do nothing when trying to go back
+            if (index === 0) {
+                return;
+            }
+
+            // if the input is empty, focus on the previous input
+            if (lengthBefore === 0) {
+                inputRefs[index - 1].current?.focus();
+            }
+
+        } else if (e.key >= "0" && e.key <= "9") {
+
+            let newCode = [...code];
+            newCode[index] = e.key;
+            setCode(newCode);
+
+            // if on the last input, do nothing
+            if (index === inputRefs.length - 1) {
+                return;
+            }
+
+            inputRefs[index + 1].current?.focus();
+
+        } else {
+            // error has to be a number input
         }
-
-        if (target.value.length > 0) {
-            inputRefs[inputIndex + 1].current?.focus();
-        }
-    };
-
-    const inputs = inputRefs.map((inputRef, index) => {
-        return (
-            <input
-                autoFocus={index === 0}
-
-                onChange = {goNextInput}
-                key={index}
-                ref={inputRef}
-                type="text"
-                maxLength={1}
-                size={1}
-                placeholder="-"
-            />
-        );
-    });
+    }
 
     async function handleSubmit() {
 
@@ -70,18 +68,34 @@ export default function VerifyForm() {
 
     }
 
+
     return (
         <div>
             
-            {/* 6 digit code cells */}
-            {inputs}
-            
-            {/* Verify button */}
-            <button onClick={handleSubmit}>Verify</button>
+            <div className = {styles.codeInputContainer}>
+
+                {/* 6 digit code cells */}
+                {inputRefs.map((inputRef, index) => {
+                    return (
+                        <input
+                            className = {styles.codeInput}
+                            autoFocus={index === 0}
+                            onKeyDown = {(e) => goBackInput(e, index)}
+                            key={index}
+                            ref={inputRef}
+                            type="text"
+                            maxLength={1}
+                            size={1}
+                            value={code[index]}
+                        />
+                    );
+                })
+                }
+
+            </div>
 
 
-            {/* Resend code button */}
-            <button>Resend code (does nothing)</button>
+            <button className = {styles.authButton} onClick={handleSubmit}>Verify</button>
                 
             {/* Error message */}
             {error && <p>{error}</p>}

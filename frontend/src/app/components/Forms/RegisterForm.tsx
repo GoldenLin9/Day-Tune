@@ -5,6 +5,8 @@ import useAxios from '@/hooks/useAxios';
 import { useRouter } from "next/navigation";
 import { AuthContext } from '@/context/AuthContext';
 import { toast } from "react-toastify";
+import AuthInput from "@/app/components/Forms/AuthInput";
+import AuthButton from "../Buttons/AuthButton";
 
 
 type ErrorDetail = {
@@ -34,7 +36,6 @@ export default function RegisterForm() {
         passwordConfirmation: ""
     });
 
-    const axiosInstance = useAxios();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -68,12 +69,13 @@ export default function RegisterForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} />
-            <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} />
-            <input type="email" name="email" placeholder="Email" onChange={handleChange} />
-            <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-            <input type="password" name="passwordConfirmation" placeholder="Confirm Password" onChange={handleChange} />
-            <button type="submit">Register</button>
+            <AuthInput imageType="user" type="text" name="firstName" placeholder="First Name" value={formInfo.firstName} onChange={handleChange} />
+            <AuthInput imageType="user" type="text" name="lastName" placeholder="Last Name" value={formInfo.lastName} onChange={handleChange} />
+            <AuthInput imageType="email" type="email" name="email" placeholder="Email" value={formInfo.email} onChange={handleChange} />
+            <AuthInput imageType="password" type="password" name="password" placeholder="Password" value={formInfo.password} onChange={handleChange} />
+            <AuthInput imageType="password" type="password" name="passwordConfirmation" placeholder="Confirm Password" value={formInfo.passwordConfirmation} onChange={handleChange} />
+
+            <AuthButton text={"Register"} link={"#"} />
 
             {errors.map(({field, messages}) => {
                 return (

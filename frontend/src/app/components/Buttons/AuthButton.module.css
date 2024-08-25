@@ -6,6 +6,9 @@
 
     border: none;
 
+    margin-left: 50%;
+    transform: translateX(-50%);
+
     cursor: pointer;
     transition: background-color 0.3s;
 }
