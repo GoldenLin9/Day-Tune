@@ -6,3 +6,4 @@ db.sqlite3
 .env.local
 /staticfiles/
 /static/
+*.sqlite3

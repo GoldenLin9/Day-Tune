@@ -7,22 +7,30 @@ import { toast } from "react-toastify";
 import AuthInput from "./AuthInput";
 import AuthButton from "../Buttons/AuthButton";
 
+import { Errors } from "@/types";
+
 const ForgotPasswordForm = () => {
 
     const [email, setEmail] = useState("");
-    const [error, setError] = useState("");
+    const [errors, setErrors] = useState<Errors | []>([]);
 
     const { forgotPassword } = useAuth();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setErrors([]);
 
-        const error = await forgotPassword(email);
+        const errors = await forgotPassword(email);
 
-        if (error != null) {
-            setError(error);
+        if (errors.length !== 0) {
+            errors.forEach(({field, messages}) => {
+                setErrors(errors => [...errors, {field, messages}]);
+            });
+
+            toast.error("Error sending reset email. Please try again");
             return;
         }
+
 
         toast.success("Password reset email sent. Please check your email");
     }
@@ -31,9 +39,21 @@ const ForgotPasswordForm = () => {
         <>
             <form onSubmit={handleSubmit}>
                 <AuthInput imageType="email" type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <AuthButton text="Send Reset Email" link="#" />
+                <AuthButton text="Send Reset Email" type = "submit" />
             </form>
-            {error && <p>{error}</p>}
+            
+            {errors.map(({field, messages}) => {
+                return (
+                    <div key={field}>
+                        <p>{field}</p>
+                        <ul>
+                            {messages.map((message, index) => {
+                                return <li key={index}>{message}</li>
+                            })}
+                        </ul>
+                    </div>
+                )
+            })}
         </>
     )
 };

@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import AuthInput from "./AuthInput";
 import AuthButton from "../Buttons/AuthButton";
+import { Errors } from "@/types";
 
 
 const PasswordResetForm = () => {
     
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
-    const [errorArray, setErrorArray] = useState<JSX.Element[]>([]);
+    const [errors, setErrors] = useState<Errors | []>([]);
 
     const { resetPassword } = useAuth();
     const router = useRouter();
@@ -21,17 +22,18 @@ const PasswordResetForm = () => {
 
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        setErrorArray([]);
         e.preventDefault();
+        setErrors([]);
+        console.log("resetting password")
 
-        const error = await resetPassword(uid, token, newPassword, newPasswordConfirmation);
+        const errors = await resetPassword(uid, token, newPassword, newPasswordConfirmation);
 
-        if (error != null) {
-
-            Object.entries(error).map(([errorType, errors], index) => {
-                setErrorArray(errorArray => [...errorArray, <p key={index}>{errorType}: {errors.join(", ")}</p>]);
+        if (errors.length !== 0) {
+            errors.forEach(({field, messages}) => {
+                setErrors(errors => [...errors, {field, messages}]);
             });
 
+            toast.error("Error resetting password. Please try again");
             return;
         }
 
@@ -47,9 +49,20 @@ const PasswordResetForm = () => {
             <AuthInput imageType="password" type="password" name="password" placeholder="Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
             <AuthInput imageType="password" type="password" name="passwordConfirmation" placeholder="Confirm Password" value={newPasswordConfirmation} onChange={(e) => setNewPasswordConfirmation(e.target.value)} />
 
-            <AuthButton text="Reset Password" link="#" />
+            <AuthButton text="Reset Password" type = "submit" />
 
-            {errorArray}
+            {errors.map(({field, messages}) => {
+                return (
+                    <div key={field}>
+                        <p>{field}</p>
+                        <ul>
+                            {messages.map((message, index) => {
+                                return <li key={index}>{message}</li>
+                            })}
+                        </ul>
+                    </div>
+                )
+            })}
         </form>
 
         

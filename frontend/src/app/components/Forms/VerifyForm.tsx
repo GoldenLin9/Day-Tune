@@ -6,9 +6,11 @@ import useAxios from "@/hooks/useAxios";
 import { useRouter } from "next/navigation";
 import styles from './VerifyForm.module.css';
 import AuthButton from "../Buttons/AuthButton";
+import { Errors } from "@/types";
+import { toast } from "react-toastify";
 
 export default function VerifyForm() {
-    const [error, setError] = useState("");
+    const [errors, setErrors] = useState<Errors | []>([]);
     const [code, setCode] = useState<string []>(Array(6).fill(""));
     const { verifyEmail } = useContext(AuthContext);
     const inputRefs = Array(6).fill(null).map(() => useRef<HTMLInputElement>(null));
@@ -56,15 +58,21 @@ export default function VerifyForm() {
     }
 
     async function handleSubmit() {
+        setErrors([]);
 
-        const error = await verifyEmail(code.join(""));
+        const errors = await verifyEmail(code.join(""));
 
-        if (error != null) {
-            setError(error);
+        if (errors.length !== 0) {
+            errors.forEach(({field, messages}) => {
+                setErrors(errors => [...errors, {field, messages}]);
+            });
+
             return;
         }
 
+        toast.success("Email verified successfully");
         router.push("/login");
+
 
     }
 
@@ -98,7 +106,19 @@ export default function VerifyForm() {
             <button className = {styles.authButton} onClick={handleSubmit}>Verify</button>
                 
             {/* Error message */}
-            {error && <p>{error}</p>}
+            {errors.map(({field, messages}) => {
+                return (
+                    <div key={field}>
+                        <p>{field}</p>
+                        <ul>
+                            {messages.map((message, index) => {
+                                return <li key={index}>{message}</li>
+                            })}
+                        </ul>
+                    </div>
+                )
+            })}
+
         </div>
     )
 }

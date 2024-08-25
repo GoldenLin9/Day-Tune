@@ -1,20 +1,13 @@
 "use client"
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import useAxios from '@/hooks/useAxios';
 import { useRouter } from "next/navigation";
 import { AuthContext } from '@/context/AuthContext';
 import { toast } from "react-toastify";
 import AuthInput from "@/app/components/Forms/AuthInput";
 import AuthButton from "../Buttons/AuthButton";
-
-
-type ErrorDetail = {
-    field: string;
-    messages: Array<string>;
-};
-
-type Errors = ErrorDetail[];
+import { Errors } from "@/types";
 
 interface FormInfo {
     firstName: string;
@@ -36,11 +29,16 @@ export default function RegisterForm() {
         passwordConfirmation: ""
     });
 
+    useEffect(() => {
+        console.log("my form data: ", formInfo);
+    }, [formInfo]);
+
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setErrors([]);
 
-
+        console.log("trying to register");
 
         const registerErrors: Errors = await register(formInfo.firstName, formInfo.lastName, formInfo.email, formInfo.password, formInfo.passwordConfirmation);
 
@@ -75,7 +73,7 @@ export default function RegisterForm() {
             <AuthInput imageType="password" type="password" name="password" placeholder="Password" value={formInfo.password} onChange={handleChange} />
             <AuthInput imageType="password" type="password" name="passwordConfirmation" placeholder="Confirm Password" value={formInfo.passwordConfirmation} onChange={handleChange} />
 
-            <AuthButton text={"Register"} link={"#"} />
+            <AuthButton text={"Register"} type = "submit"/>
 
             {errors.map(({field, messages}) => {
                 return (

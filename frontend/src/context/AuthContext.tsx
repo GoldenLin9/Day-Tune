@@ -6,13 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import useAxios from "@/hooks/useAxios";
 import { useRouter } from "next/navigation";
-
-type ErrorDetail = {
-    field: string;
-    messages: Array<string>;
-};
-
-type Errors = ErrorDetail[];
+import { Errors } from "@/types";
 
 interface User {
     first_name: string;

@@ -28,7 +28,7 @@ export default function Home() {
                         {/* takes you to other pages */}
                         <li><Link className = {styles.headerLink} href = "/login">Login</Link></li>
                         <li><Link className = {styles.headerLink} href = "/register">Register</Link></li>
-                        <li><AuthButton text={"Get Started"} link={"/dashboard"} /></li>
+                        <li><Link href = "/dashboard"><AuthButton text={"Get Started"} type = "button" /></Link></li>
                     </ul>
                 </nav>
 
@@ -46,7 +46,7 @@ export default function Home() {
 
                     <p id = {styles.heroText} >Get started on your journey to self improvement today</p>
 
-                    <AuthButton text={"Get Started"} link={"/dashboard"} />
+                    <Link href = "/dashboard"><AuthButton text={"Get Started"} type = "button" /></Link>
                 </div>
 
                 <div className={styles.features}>

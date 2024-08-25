@@ -199,6 +199,9 @@ class VerifyEmailView(APIView):
         userId = request.data['userId']
         code = request.data['code']
 
+        print("USER ID: ", userId)
+        print("CODE: ", code)
+
         user = User.objects.get(pk=userId)
         print(user)
         validation_codes = ValidationCode.objects.filter(user=user)

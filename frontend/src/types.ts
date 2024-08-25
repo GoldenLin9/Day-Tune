@@ -22,4 +22,11 @@ type Schedule = {
     time_blocks: Array<TimeBlock>;
 }
 
-export type { User, TimeBlock, Schedule }
+type ErrorDetail = {
+    field: string;
+    messages: Array<string>;
+};
+
+type Errors = ErrorDetail[];
+
+export type { User, TimeBlock, Schedule, Errors }

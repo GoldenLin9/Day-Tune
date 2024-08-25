@@ -1,21 +1,70 @@
-{% load i18n %}
-
-{% block subject %}
-{% blocktrans %}Password reset request for Better Self{% endblocktrans %}
-{% endblock subject %}
-
-{% block text_body %}
-{% blocktrans %}Hi {{ first_name }},{% endblocktrans %}
-
-{% trans "You have requested a password reset for your Better Self account. Please go to the following page and choose a new password:" %}
-{% block url %}
-{{ protocol }}://{{ domain }}/{{ url|safe }}
-{% endblock url %}
-
-{% trans "If you did not request this change, please ignore this email." %}
-
-{% blocktrans %}Thank you for being a part of Better Self!{% endblocktrans %}
-
-{% blocktrans %}Best regards,{% endblocktrans %}
-{% blocktrans %}The Better Self Team{% endblocktrans %}
-{% endblock text_body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Your Account - {{ site_name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .header img {
+            max-width: 200px;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff; /* Brand color */
+            background-color: #f0f8ff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="http://localhost:8000/static/logo.svg" alt="{{ site_name }} Logo">
+        </div>
+        <div class="content">
+            <h2>Hi, {{ first_name }}!</h2>
+            <p>Welcome to {{ site_name }}! To activate your account, please use the following code:</p>
+            <div class="code">
+                {{ code }}
+            </div>
+            <p>If you didn't request this email, you can safely ignore it.</p>
+        </div>
+        <div class="footer">
+            <p>Thank you for joining us!</p>
+            <p>The {{ site_name }} Team</p>
+        </div>
+    </div>
+</body>
+</html>
