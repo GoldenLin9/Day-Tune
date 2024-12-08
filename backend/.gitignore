@@ -1,9 +1,23 @@
-venv/ 
-*.pyc 
-__pycache__/ 
-db.sqlite3 
+# Ignore virtual environments
+venv/
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore local SQLite database files
+db.sqlite3
+*.sqlite3
+
+# Ignore environment variables files
 *.env
 .env.local
-/staticfiles/
-/static/
-*.sqlite3
+
+# Ignore Django static and collected static files
+static/
+staticfiles/
+
+# Ignore IDE/editor-specific files (optional, uncomment if applicable)
+# .vscode/
+# .idea/
+# *.swp

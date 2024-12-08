@@ -61,7 +61,7 @@ class ValidationCode(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.code
+        return f"{self.user.email} - {self.code} created at {self.created_at}"
 
     # check if code is expired
     def is_expired(self):

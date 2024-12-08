@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_celery_beat',
+
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
@@ -292,3 +294,10 @@ SOCIAL_AUTH_GOOGLE_SCOPE = [
     'openid',
 ]
 SOCIAL_AUTH_GOOGLE_OATH2_EXTRA_DATA = ["first_name", "last_name"]
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = 'UTC'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+DJANGO_CELERY_BEAT_TZ_AWARE = True
