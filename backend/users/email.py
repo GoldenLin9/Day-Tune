@@ -9,6 +9,31 @@ from .models import ValidationCode, User
 
 from djoser.email import PasswordResetEmail
 
+class EmailReminder:
+
+    def __init__(self, user):
+        self.user = user
+    
+    def sendReminder(self):
+        name = self.user.first_name
+        email = self.user.email
+
+        context = {
+            'name': name,
+        }
+
+        subject = _("Email reminder")
+        message = render_to_string('email_reminder.html', context)
+
+        send_mail(
+            subject,
+            '',
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
+            html_message=message
+        )
+        
 
 class ActivationEmail:
 

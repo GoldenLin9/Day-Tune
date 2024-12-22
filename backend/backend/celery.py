@@ -13,4 +13,9 @@ app.conf.beat_schedule = {
         'task': 'users.tasks.delete_expired_codes',
         'schedule': 5.0,  # Schedule every 5 seconds
     },
+    'email-reminder': {
+        #TODO: Update time delta to an appropriate value in production
+        'task': 'users.tasks.email_reminder',
+        'schedule': timedelta(days=1), # Schedule every 1 day
+    },
 }

@@ -5,6 +5,8 @@ from datetime import timedelta
 from celery.utils.log import get_task_logger
 
 from users.models import ValidationCode
+from users.models import User
+from users.email import EmailReminder
 
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
@@ -20,3 +22,14 @@ def delete_expired_codes():
     
 
     return "Deleted expired codes"
+
+@shared_task
+def email_reminder():
+    logger.info("Sending email reminders...")
+
+    for user in User.objects.all():
+        EmailReminder(user).sendReminder()
+    
+    return "Email reminders sent"
+
+    

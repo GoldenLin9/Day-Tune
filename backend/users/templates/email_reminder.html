@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>Hey {{name}}!</p>
+        <p>Don't forget to schedule your day on Better Self! Remember, a well-planned day keeps the chaos at bay.</p>
+        <p>And if all else fails, just schedule a meeting with your couch. It’s a great listener!</p>
+        <p>Happy planning!</p>
+        <div class="footer">
+            <p>The Better Self Team</p>
+        </div>
+    </div>
+</body>
+</html>
